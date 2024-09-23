@@ -8,7 +8,38 @@ package database
 import (
 	"context"
 	"database/sql"
+
+	"github.com/google/uuid"
 )
+
+const getUser = `-- name: GetUser :one
+SELECT Id, FirstName, LastName, Email, Username, Password
+FROM Users
+WHERE Id = $1
+`
+
+type GetUserRow struct {
+	ID        uuid.UUID
+	Firstname string
+	Lastname  sql.NullString
+	Email     string
+	Username  string
+	Password  string
+}
+
+func (q *Queries) GetUser(ctx context.Context, id uuid.UUID) (GetUserRow, error) {
+	row := q.db.QueryRowContext(ctx, getUser, id)
+	var i GetUserRow
+	err := row.Scan(
+		&i.ID,
+		&i.Firstname,
+		&i.Lastname,
+		&i.Email,
+		&i.Username,
+		&i.Password,
+	)
+	return i, err
+}
 
 const insertUser = `-- name: InsertUser :one
 INSERT INTO Users(

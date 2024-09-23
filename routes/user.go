@@ -9,6 +9,6 @@ func UserRoutes(router *gin.Engine) {
 	userGroup := router.Group("/users")
 	{
 		userGroup.POST("/", controllers.InsertUser)
-		userGroup.GET("/", controllers.GetUser)
+		userGroup.GET("/:id", controllers.GetUser)
 	}
 }

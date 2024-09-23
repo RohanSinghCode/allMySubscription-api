@@ -17,3 +17,8 @@ VALUES (
 )
 
 RETURNING *;
+
+-- name: GetUser :one
+SELECT Id, FirstName, LastName, Email, Username, Password
+FROM Users
+WHERE Id = $1;
